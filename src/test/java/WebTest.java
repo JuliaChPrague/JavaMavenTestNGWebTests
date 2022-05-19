@@ -31,22 +31,52 @@ public class WebTest {
 
         WebElement menuBrowseLanguages = driver.findElement(
                 By.xpath(
-              "//body/div[@id='wrap']/div[@id='navigation']/ul[@id='menu']/li/a[@href='/abc.html']")
+                        "//body/div[@id='wrap']/div[@id='navigation']/ul[@id='menu']/li/a[@href='/abc.html']")
         );
         menuBrowseLanguages.click();
 
         WebElement menuStart = driver.findElement(
                 By.xpath(
-                "//body/div[@id='wrap']/div[@id='navigation']/ul[@id='menu']/li/a[@href='/']")
+                        "//body/div[@id='wrap']/div[@id='navigation']/ul[@id='menu']/li/a[@href='/']")
         );
         menuStart.click();
 
         WebElement h2 = driver.findElement(By.xpath("//body/div[@id='wrap']/div[@id='main']/h2"));
         String actualResult = h2.getText();
-        //sleep(2000);
 
         Assert.assertEquals(actualResult, expectedResult);
 
         driver.quit();
     }
+
+//    TC_11_01 Подтвердите, что на странице по базовой ссылке в правом верхнем углу
+//    пользователь видит заголовок 99 Bottles of Beer
+//        Шаги:
+//        1. Открыть вебсайт на базовой странице
+//        2. Считать заголовок в правом верхнем углу
+//        3. Подтвердить, что текст заголовка соответствует ожидаемому
+//        4. Закрыть браузер
+
+    @Test
+    public void testTitleRightUpMenu() {
+
+        String chromeDriver = "webdriver.chrome.driver";
+        String driverPath = "C:\\Users\\yulia\\Downloads\\chromedriver_win32\\chromedriver.exe";
+        String url = "http://www.99-bottles-of-beer.net/";
+        String expectedResult = "99 Bottles of Beer";
+
+        System.setProperty(chromeDriver, driverPath);
+        WebDriver driver = new ChromeDriver();
+
+        driver.get(url);
+
+        WebElement title = driver.findElement(By.xpath("//body/div[@id='wrap']/div[@id='header']/h1"));
+        String actualResult = title.getText();
+
+        Assert.assertEquals(actualResult, expectedResult);
+
+        driver.quit();
+    }
+
+
 }
