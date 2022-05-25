@@ -1,12 +1,9 @@
-import com.google.common.util.concurrent.ServiceManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-
-import java.util.List;
 
 
 public class WebTest {
@@ -271,15 +268,17 @@ public class WebTest {
         driver.quit();
     }
 
-//    TC_11_11 Подтвердите, что если на странице по ссылке http://www.99-bottles-of-beer.net/submitnewlanguage.html ,
-//    пользователь нажмет кнопку Submit Language, не заполнив информацию в обязательных полях, будет показана ошибка
-//    Error: Precondition failed - Incomplete Input.
-//    Шаги:
-//1. Открыть вебсайт на странице
-//2. Нажать на кнопку Submit Language
-//3. Подтвердить, что на странице показана ошибка
-//4. Подтвердить, что текст ошибки соответствует ожидаемому
-//5. Закрыть браузер
+    /**
+     * TC_11_11 Подтвердите, что если на странице по ссылке http://www.99-bottles-of-beer.net/submitnewlanguage.html ,
+     * пользователь нажмет кнопку Submit Language, не заполнив информацию в обязательных полях, будет показана ошибка
+     * Error: Precondition failed - Incomplete Input.
+     * Шаги:
+     * 1. Открыть вебсайт на странице
+     * 2. Нажать на кнопку Submit Language
+     * 3. Подтвердить, что на странице показана ошибка
+     * 4. Подтвердить, что текст ошибки соответствует ожидаемому
+     * 5. Закрыть браузер
+     */
 
     @Test
     public void testShowError() {
@@ -304,18 +303,19 @@ public class WebTest {
         driver.quit();
     }
 
- /**TC_11_12 Precondition: Если на странице по ссылке http://www.99-bottles-of-beer.net/submitnewlanguage.html,
-пользователь нажмет кнопку Submit Language, не заполнив информацию в обязательных полях, будет показана ошибка с текстом
-Error: Precondition failed - Incomplete Input. Подтвердите, что в тексте ошибки слова Error,
-  Precondition, Incomplete и Input написаны с большой буквы, а слово failed написано с маленькой буквы.
-Так же подтвердите, что в тексте ошибки содержатся знаки :, -  и .
-Шаги:
-1. Открыть вебсайт на странице
-2. Нажать на кнопку Submit Language
-3. Считать текст ошибки
-4. Подтвердить requirenments
-5. Закрыть браузер
-  */
+    /**
+     * TC_11_12 Precondition: Если на странице по ссылке http://www.99-bottles-of-beer.net/submitnewlanguage.html,
+     * пользователь нажмет кнопку Submit Language, не заполнив информацию в обязательных полях, будет показана ошибка с текстом
+     * Error: Precondition failed - Incomplete Input. Подтвердите, что в тексте ошибки слова Error,
+     * Precondition, Incomplete и Input написаны с большой буквы, а слово failed написано с маленькой буквы.
+     * Так же подтвердите, что в тексте ошибки содержатся знаки :, -  и .
+     * Шаги:
+     * 1. Открыть вебсайт на странице
+     * 2. Нажать на кнопку Submit Language
+     * 3. Считать текст ошибки
+     * 4. Подтвердить requirenments
+     * 5. Закрыть браузер
+     */
 
     @Test
     public void testErrorPreconditionUpLowerLetter() {
@@ -340,32 +340,78 @@ Error: Precondition failed - Incomplete Input. Подтвердите, что в
                 By.xpath("//div[@id='wrap']/div[@id='main']" +
                         "/form[@id='addlanguage']/p/input[@type='submit']")).click();
 
-        WebElement title = driver.findElement(By.xpath("//div[@id='wrap']/div[@id='main']/p"));
+        WebElement errorMessage = driver.findElement(By.xpath("//div[@id='wrap']/div[@id='main']/p"));
 
-        Assert.assertEquals(title.getText().substring(0,5),expectedResult1);
+        Assert.assertEquals(errorMessage.getText().substring(0, 5), expectedResult1);
 
-        Assert.assertEquals(title.getText().substring(7,19 ), expectedResult2);
+        Assert.assertEquals(errorMessage.getText().substring(7, 19), expectedResult2);
 
-        Assert.assertEquals(title.getText().substring(29,39),expectedResult3);
-        Assert.assertEquals(title.getText().substring(40,45),expectedResult3);
-        Assert.assertEquals(title.getText().substring(20,26),expectedResult3);
-        Assert.assertEquals(title.getText().substring(5,6),expectedResult3);
-        Assert.assertEquals(title.getText().substring(27,28),expectedResult3);
-        Assert.assertEquals(title.getText().substring(45),expectedResult3);
+        Assert.assertEquals(errorMessage.getText().substring(29, 39), expectedResult3);
+        Assert.assertEquals(errorMessage.getText().substring(40, 45), expectedResult3);
+        Assert.assertEquals(errorMessage.getText().substring(20, 26), expectedResult3);
+        Assert.assertEquals(errorMessage.getText().substring(5, 6), expectedResult3);
+        Assert.assertEquals(errorMessage.getText().substring(27, 28), expectedResult3);
+        Assert.assertEquals(errorMessage.getText().substring(45), expectedResult3);
+
+        driver.quit();
+    }
+    //второй вариант
+
+    @Test
+    public void testErrorMessage() {
+        String chromeDriver = "webdriver.chrome.driver";
+        String driverPath = "C:\\Users\\yulia\\Downloads\\chromedriver_win32\\chromedriver.exe";
+        String url = "http://www.99-bottles-of-beer.net/submitnewlanguage.html";
+
+        System.setProperty(chromeDriver, driverPath);
+        WebDriver driver = new ChromeDriver();
+
+        driver.get(url);
+
+        driver.findElement(
+                By.xpath("//div[@id='wrap']/div[@id='main']" +
+                        "/form[@id='addlanguage']/p/input[@type='submit']")).click();
+        String errorMessage = driver.findElement(
+                By.xpath("//div[@id='wrap']/div[@id='main']/p")).getText().trim();
+        String[] arrOfWordsFromError = errorMessage.split(" ");
+        for (String s : arrOfWordsFromError) {
+            if (s.equals("Error")) {
+                Assert.assertTrue((Character.isUpperCase(s.charAt(0))));
+            }
+            if (s.equals("Precondition")) {
+                Assert.assertTrue((Character.isUpperCase(s.charAt(0))));
+            }
+            if (s.equals("Incomplete")) {
+                Assert.assertTrue((Character.isUpperCase(s.charAt(0))));
+            }
+            if (s.equals("Input")) {
+                Assert.assertTrue((Character.isUpperCase(s.charAt(0))));
+            }
+            if (s.equals("failed")) {
+                Assert.assertTrue((Character.isLowerCase(s.charAt(0))));
+            }
+        }
+
+        Assert.assertTrue(errorMessage.contains("."));
+        Assert.assertTrue(errorMessage.contains(":"));
+        Assert.assertTrue(errorMessage.contains("-"));
+        Assert.assertEquals("Error: Precondition failed - Incomplete Input.", errorMessage);
 
         driver.quit();
     }
 
-//    TC_11_13 Подтвердите, что на странице по ссылке http://www.99-bottles-of-beer.net/submitnewlanguage.html
-//    в первом пункте списка пользователь видит текст
-//    IMPORTANT: Take your time! The more carefully you fill out this form (especially the language name and description),
-//    the easier it will be for us and the faster your language will show up on this page. We don't have the time to mess
-//    around with fixing your descriptions etc. Thanks for your understanding.
-//    Шаги:
-//1. Открыть вебсайт на странице
-//2. Считать текст
-//3. Подтвердить, что текст соответствует ожидаемому
-//4. Закрыть браузер
+    /**
+     * TC_11_13 Подтвердите, что на странице по ссылке http://www.99-bottles-of-beer.net/submitnewlanguage.html
+     * в первом пункте списка пользователь видит текст
+     * IMPORTANT: Take your time! The more carefully you fill out this form (especially the language name and description),
+     * the easier it will be for us and the faster your language will show up on this page. We don't have the time to mess
+     * around with fixing your descriptions etc. Thanks for your understanding.
+     * Шаги:
+     * 1. Открыть вебсайт на странице
+     * 2. Считать текст
+     * 3. Подтвердить, что текст соответствует ожидаемому
+     * 4. Закрыть браузер
+     */
 
     @Test
     public void testTextRight() {
@@ -391,23 +437,26 @@ Error: Precondition failed - Incomplete Input. Подтвердите, что в
         driver.quit();
     }
 
-/**TC_11_14 Подтвердите, что нажав на пункт меню Browse Languages, пользователь увидит таблицу
-со следующими названиями для первого и второго столбцов:
-Language
-Author
- Шаги:
-1. Открыть вебсайт на базовой странице
-2. Нажать на пункт меню Browse Languages
-3. Считать названия первого и второго столбцов таблицы
-3. Подтвердить, что названия соответствует ожидаемым
-4. Закрыть браузер
- */
+    /**
+     * TC_11_14 Подтвердите, что нажав на пункт меню Browse Languages, пользователь увидит таблицу
+     * со следующими названиями для первого и второго столбцов:
+     * Language
+     * Author
+     * Шаги:
+     * 1. Открыть вебсайт на базовой странице
+     * 2. Нажать на пункт меню Browse Languages
+     * 3. Считать названия первого и второго столбцов таблицы
+     * 3. Подтвердить, что названия соответствует ожидаемым
+     * 4. Закрыть браузер
+     */
 
     @Test
     public void testColomsTitle() {
         String chromeDriver = "webdriver.chrome.driver";
         String driverPath = "C:\\Users\\yulia\\Downloads\\chromedriver_win32\\chromedriver.exe";
         String url = "http://www.99-bottles-of-beer.net/";
+        String expectedResult1 = "Language";
+        String expectedResult2 = "Author";
 
         System.setProperty(chromeDriver, driverPath);
         WebDriver driver = new ChromeDriver();
@@ -417,18 +466,89 @@ Author
         WebElement menuBL = driver.findElement(
                 By.xpath("//div[@id='wrap']/div[@id='navigation']//a[@href='/abc.html']"));
         menuBL.click();
+
+        WebElement firstColumn = driver.findElement(
+                By.xpath("//div[@id='wrap']//table[@id='category']//th[@style='width: 40%;']"));
+        Assert.assertEquals(firstColumn.getText(), expectedResult1);
+
+        WebElement secondColumn = driver.findElement(
+                By.xpath("//div[@id='wrap']//table[@id='category']//th[@style='width: 30%;']"));
+        Assert.assertEquals(secondColumn.getText(), expectedResult2);
+
+        driver.quit();
     }
 
-/**TC_11_21 Подтвердите, что на странице по ссылке http://www.99-bottles-of-beer.net/submitnewlanguage.html
- пользователь видит предупреждение IMPORTANT:, написанное белыми буквами bold шрифтом на красном фоне,
- и что все буквы - capital
- Шаги:
-1. Открыть вебсайт на странице
-2. Считать слово IMPORTANT: из списка
-3. Подтвердить requirenments
-4. Закрыть браузер
- */
+    /**
+     * TC_11_15 Подтвердите, что на странице по базовой ссылке пользователь НЕ увидит новые комментарии,
+     * если нажмет на пункты меню Top List → New Comments
+     * Шаги:
+     * Придумать самостоятельно.
+     * Шаги:
+     * 1. Открыть вебсайт на базовой странице
+     * 2. Нажать на пункт меню Top List
+     * 3. Зайти в подменю New Comments
+     * 4. Убедиться, что комментариев нет
+     * 5. Закрыть браузер
+     */
 
+    @Test
+    public void testNoComments() {
+
+        String chromeDriver = "webdriver.chrome.driver";
+        String driverPath = "C:\\Users\\yulia\\Downloads\\chromedriver_win32\\chromedriver.exe";
+        String url = "http://www.99-bottles-of-beer.net/";
+
+        System.setProperty(chromeDriver, driverPath);
+        WebDriver driver = new ChromeDriver();
+
+        driver.get(url);
+
+        driver.findElement(
+                By.xpath("//div[@id='wrap']/div[@id='navigation']//a[@href='/abc.html']")).click();
+
+        driver.findElement(By.xpath("//div[@id='wrap']//a[@href='/toplist.html']")).click();
+
+        driver.findElement(
+                        By.xpath("//div[@id='wrap']//ul[@id='submenu']//li/a[@href='./newcomments.html']"))
+                .click();
+
+        boolean c = true;
+        WebElement noComments = driver.findElement(By.xpath(" "));
+        String text = noComments.getText();
+        if (text.equals("")) {
+            c = true;
+        } else {
+            c = false;
+        }
+        //Assert.assertEquals();
+    }
+
+    /**
+     * TC_11_21 Подтвердите, что на странице по ссылке http://www.99-bottles-of-beer.net/submitnewlanguage.html
+     * пользователь видит предупреждение IMPORTANT:, написанное белыми буквами bold шрифтом на красном фоне,
+     * и что все буквы - capital
+     * Шаги:
+     * 1. Открыть вебсайт на странице
+     * 2. Считать слово IMPORTANT: из списка
+     * 3. Подтвердить requirenments
+     * 4. Закрыть браузер
+     */
+
+    @Test
+    public void testImportantWhiteColorBold() {
+
+        String chromeDriver = "webdriver.chrome.driver";
+        String driverPath = "C:\\Users\\yulia\\Downloads\\chromedriver_win32\\chromedriver.exe";
+        String url = "//www.99-bottles-of-beer.net/submitnewlanguage.html";
+
+        System.setProperty(chromeDriver, driverPath);
+        WebDriver driver = new ChromeDriver();
+
+        driver.get(url);
+
+        driver.findElement(By.xpath(""));
+
+    }
 
 
 }
