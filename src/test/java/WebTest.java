@@ -497,6 +497,7 @@ public class WebTest {
         String chromeDriver = "webdriver.chrome.driver";
         String driverPath = "C:\\Users\\yulia\\Downloads\\chromedriver_win32\\chromedriver.exe";
         String url = "http://www.99-bottles-of-beer.net/";
+        String expectedResult = "";
 
         System.setProperty(chromeDriver, driverPath);
         WebDriver driver = new ChromeDriver();
@@ -512,15 +513,10 @@ public class WebTest {
                         By.xpath("//div[@id='wrap']//ul[@id='submenu']//li/a[@href='./newcomments.html']"))
                 .click();
 
-        boolean c = true;
-        WebElement noComments = driver.findElement(By.xpath(" "));
-        String text = noComments.getText();
-        if (text.equals("")) {
-            c = true;
-        } else {
-            c = false;
-        }
-        //Assert.assertEquals();
+       WebElement textEmpty = driver.findElement(By.xpath("//div[@id='main']/p"));
+       String actualResult = textEmpty.getText();
+
+        Assert.assertEquals(actualResult, expectedResult);
     }
 
     /**
